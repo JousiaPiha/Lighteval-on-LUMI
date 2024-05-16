@@ -20,13 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 setup(
     name="lighteval",
-    version="0.4.0.dev0",  # Ensure this version is higher than 0.3.0
-    packages=find_packages(where="src"),
+    version="0.4.0.dev0",
+    packages=find_namespace_packages(where="src"),
     package_dir={"": "src"},
+    include_package_data=True,
     install_requires=[
         "transformers>=4.38.0",
         "huggingface_hub>=0.22.0",
@@ -45,6 +46,6 @@ setup(
         "sentencepiece>=0.1.99",
         "protobuf==3.20.*",
         "pycountry",
-        "openai",  # Additional dependency added
+        "openai",
     ],
 )
