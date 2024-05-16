@@ -20,7 +20,31 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
-
-setup()
+setup(
+    name="lighteval",
+    version="0.4.0.dev0",  # Ensure this version is higher than 0.3.0
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
+    install_requires=[
+        "transformers>=4.38.0",
+        "huggingface_hub>=0.22.0",
+        "torch>=2.0",
+        "GitPython>=3.1.41",
+        "datasets>=2.14.0",
+        "termcolor==2.3.0",
+        "pytablewriter",
+        "colorama",
+        "aenum==3.1.15",
+        "nltk==3.8.1",
+        "scikit-learn",
+        "spacy==3.7.2",
+        "sacrebleu",
+        "rouge_score==0.1.2",
+        "sentencepiece>=0.1.99",
+        "protobuf==3.20.*",
+        "pycountry",
+        "openai",  # Additional dependency added
+    ],
+)
