@@ -1,19 +1,103 @@
-<div align="center">
+# Lighteval-on-LUMI
 
-[![Tests](https://github.com/huggingface/lighteval/actions/workflows/tests.yaml/badge.svg?branch=main)](https://github.com/huggingface/lighteval/actions/workflows/tests.yaml?query=branch%3Amain)
-[![Quality](https://github.com/huggingface/lighteval/actions/workflows/quality.yaml/badge.svg?branch=main)](https://github.com/huggingface/lighteval/actions/workflows/quality.yaml?query=branch%3Amain)
-[![Python versions](https://img.shields.io/pypi/pyversions/lighteval)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/huggingface/lighteval/blob/main/LICENSE)
-[![Status](https://img.shields.io/pypi/status/lighteval)](https://pypi.org/project/lighteval/)
-[![Version](https://img.shields.io/pypi/v/lighteval)](https://pypi.org/project/lighteval/)
+This repository is a fork of the [Lighteval project](https://github.com/originalusername/Lighteval), adjusted for evaluating large language models (LLMs) on the LUMI supercomputer.
 
-</div>
+## Modifications
 
-# LightEval 🌤️
+This fork includes the following modifications to adapt Lighteval for use on the LUMI supercomputer:
+- **setup.py**: Adjusted installation settings so that the dependencies will install correctly.
+- **pyproject.toml**: Edited dependencies to reflect changes in setup.py.
 
-A lightweight framework for LLM evaluation
+## Installation on LUMI
 
-## Context
+To set up this project on LUMI, follow these steps:
+
+0. Launch an interactive compute for testing and installing purposes, for example with:
+   ```bash
+   #!/bin/bash
+   module use /appl/local/csc/modulefiles/
+   module purge
+   module load LUMI
+   module load pytorch
+   srun \
+    --account=project_462000558 \
+    --partition=dev-g \
+    --nodes=1 \
+    --gres=gpu:mi250:2 \
+    --time=3:00:00 \
+    --mem=0 \
+    --pty \
+    bash
+   ```
+
+1. Clone this repository
+   ```bash
+   cd /projappl/<PROJECT_FOLDER>/$USER
+   git clone https://github.com/JousiaPiha/Lighteval-on-LUMI.git
+   cd Lighteval-on-LUMI
+   ```
+
+2. Create and activate a Python virtual environment:
+   ```bash
+   python -m venv .venv --system-site-packages
+   source .venv/bin/activate
+
+3. Install packages:
+   ```bash
+   pip install '.[accelerate]'
+   ```
+
+4. Add packages in virtual environment to PYTHONPATH:
+   ```bash
+   export PYTHONPATH="/projappl/<PROJECT_FOLDER>/$USER/lighteval/.venv/lib/python3.10/site-packages/"
+   ```
+
+5. Multi-GPU configuration:
+   ```bash
+   singularity_wrapper exec accelerate config
+   ```
+   At least for testing, most settings can be left at their default. The multi-GPU can be re-configured at any time by running the previous command again. Refer to the following for basic configuration.
+   ```bash
+    --------------------------------------------------------------------
+    In which compute environment are you running?
+    This machine
+    --------------------------------------------------------------------
+    Which type of machine are you using?
+    multi-GPU
+    How many different machines will you use (use more than 1 for multi-node training)? [1]:
+    Should distributed operations be checked while running for errors? This can avoid timeout issues but will be slower. [yes/NO]:
+    Do you wish to optimize your script with torch dynamo?[yes/NO]:
+    Do you want to use DeepSpeed? [yes/NO]:
+    Do you want to use FullyShardedDataParallel? [yes/NO]:
+    Do you want to use Megatron-LM ? [yes/NO]:
+    How many GPU(s) should be used for distributed training? [1]:4
+    What GPU(s) (by id) should be used for training on this machine as a comma-seperated list? [all]:
+    --------------------------------------------------------------------
+    Do you wish to use FP16 or BF16 (mixed precision)?
+    bf16
+    accelerate configuration saved at /scratch/project_462000558/hf_cache/accelerate/default_config.yaml
+   ```
+
+## Evaluating example
+
+Now the installation can be tested:
+
+```bash
+mkdir evals
+singularity_wrapper exec accelerate launch --multi_gpu --num_processes=2 run_evals_accelerate.py \
+    --model_args="pretrained=openai-community/gpt2" \
+    --tasks "leaderboard|truthfulqa:mc|0|0" \
+    --output_dir="./evals/" \
+    -–override_batch_size=1
+```
+ 
+
+
+
+## Original Project
+
+**Below is the original readme of Lighteval. Please, adjust commands according to the instructions above.**
+
 LightEval is a lightweight LLM evaluation suite that Hugging Face has been using internally with the recently released LLM data processing library [datatrove](https://github.com/huggingface/datatrove) and LLM training library [nanotron](https://github.com/huggingface/nanotron).
 
 We're releasing it with the community in the spirit of building in the open.
