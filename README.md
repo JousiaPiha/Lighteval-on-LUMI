@@ -1,6 +1,6 @@
 # Lighteval-on-LUMI
 
-This repository is a fork of the [Lighteval project](https://github.com/originalusername/Lighteval), adjusted for evaluating large language models (LLMs) on the LUMI supercomputer.
+This repository is a fork of the [Lighteval project](https://github.com/huggingface/lighteval), adjusted for evaluating large language models (LLMs) on the LUMI supercomputer.
 
 ## Modifications
 
