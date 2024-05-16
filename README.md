@@ -12,7 +12,7 @@ This fork includes the following modifications to adapt Lighteval for use on the
 
 To set up this project on LUMI, follow these steps:
 
-0. Launch an interactive compute for testing and installing purposes, for example with:
+0. Launch an interactive compute node for testing and installing purposes, for example with:
    ```bash
    #!/bin/bash
    module use /appl/local/csc/modulefiles/
