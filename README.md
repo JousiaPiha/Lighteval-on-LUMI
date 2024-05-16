@@ -13,11 +13,6 @@ This fork includes the following modifications to adapt Lighteval for use on the
 To set up this project on LUMI, follow these steps:
 
 0. Preparation:
-   
-   Set the following variable for your LUMI project, if you want to copy-paste commands easily:
-   ```bash
-   PROJECT_FOLDER="project_<PROJECT_NUMBER>"
-   ```
 
    Launch an interactive compute node for testing and installing purposes, for example with:
    ```bash
@@ -36,14 +31,18 @@ To set up this project on LUMI, follow these steps:
     --pty \
     bash
    ```
+   Set the following variable for your LUMI project, if you want to copy-paste commands easily:
+   ```bash
+   PROJECT_FOLDER="project_<PROJECT_NUMBER>"
+   ```
    Set cache directory for downloaded models if needed:
    ```bash
-   export HF_HOME=/scratch/<PROJECT_FOLDER>/hf_cache
+   export HF_HOME=/scratch/$PROJECT_FOLDER/hf_cache
    ```
 
 2. Clone this repository
    ```bash
-   cd /projappl/<PROJECT_FOLDER>/$USER
+   cd /projappl/$PROJECT_FOLDER/$USER
    git clone https://github.com/JousiaPiha/Lighteval-on-LUMI.git
    cd Lighteval-on-LUMI
    ```
@@ -60,7 +59,7 @@ To set up this project on LUMI, follow these steps:
 
 5. Add packages in virtual environment to PYTHONPATH:
    ```bash
-   export PYTHONPATH="/projappl/<PROJECT_FOLDER>/$USER/lighteval/.venv/lib/python3.10/site-packages/"
+   export PYTHONPATH="/projappl/$PROJECT_FOLDER/$USER/lighteval/.venv/lib/python3.10/site-packages/"
    ```
 
 6. Multi-GPU configuration:
@@ -86,7 +85,7 @@ To set up this project on LUMI, follow these steps:
     --------------------------------------------------------------------
     Do you wish to use FP16 or BF16 (mixed precision)?
     bf16
-    accelerate configuration saved at /scratch/<PROJECT_FOLDER>/hf_cache/accelerate/default_config.yaml
+    accelerate configuration saved at /scratch/$PROJECT_FOLDER/hf_cache/accelerate/default_config.yaml
    ```
 
 ## Evaluating example
