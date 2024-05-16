@@ -20,7 +20,7 @@ To set up this project on LUMI, follow these steps:
    module load LUMI
    module load pytorch
    srun \
-    --account=project_462000558 \
+    --account=<PROJECT> \
     --partition=dev-g \
     --nodes=1 \
     --gres=gpu:mi250:2 \
@@ -31,7 +31,7 @@ To set up this project on LUMI, follow these steps:
    ```
    Set cache directory for downloaded models if needed:
    ```bash
-   export HF_HOME=/scratch/<PROJECT_FOLDER/hf_cache
+   export HF_HOME=/scratch/<PROJECT_FOLDER>/hf_cache
    ```
 
 2. Clone this repository
@@ -79,7 +79,7 @@ To set up this project on LUMI, follow these steps:
     --------------------------------------------------------------------
     Do you wish to use FP16 or BF16 (mixed precision)?
     bf16
-    accelerate configuration saved at /scratch/project_462000558/hf_cache/accelerate/default_config.yaml
+    accelerate configuration saved at /scratch/<PROJECT_FOLDER>/hf_cache/accelerate/default_config.yaml
    ```
 
 ## Evaluating example
@@ -94,7 +94,6 @@ singularity_wrapper exec accelerate launch --multi_gpu --num_processes=2 run_eva
     --output_dir="./evals/" \
     -–override_batch_size=1
 ```
- 
 
 
 
