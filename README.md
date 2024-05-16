@@ -59,7 +59,7 @@ To set up this project on LUMI, follow these steps:
 
 5. Add packages in virtual environment to PYTHONPATH:
    ```bash
-   export PYTHONPATH="/projappl/$PROJECT_FOLDER/$USER/lighteval/.venv/lib/python3.10/site-packages/"
+   export PYTHONPATH="/projappl/$PROJECT_FOLDER/$USER/Lighteval-on-LUMI/.venv/lib/python3.10/site-packages/"
    ```
 
 6. Multi-GPU configuration:
