@@ -13,6 +13,7 @@ This fork includes the following modifications to adapt Lighteval for use on the
 To set up this project on LUMI, follow these steps:
 
 0. Preparation:
+   
    Set the following variable for your LUMI project, if you want to copy-paste commands easily:
    ```bash
    PROJECT_FOLDER="project_<PROJECT_NUMBER>"
