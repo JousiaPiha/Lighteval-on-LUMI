@@ -29,30 +29,34 @@ To set up this project on LUMI, follow these steps:
     --pty \
     bash
    ```
+   Set cache directory for downloaded models if needed:
+   ```bash
+   export HF_HOME=/scratch/<PROJECT_FOLDER/hf_cache
+   ```
 
-1. Clone this repository
+2. Clone this repository
    ```bash
    cd /projappl/<PROJECT_FOLDER>/$USER
    git clone https://github.com/JousiaPiha/Lighteval-on-LUMI.git
    cd Lighteval-on-LUMI
    ```
 
-2. Create and activate a Python virtual environment:
+3. Create and activate a Python virtual environment:
    ```bash
    python -m venv .venv --system-site-packages
    source .venv/bin/activate
 
-3. Install packages:
+4. Install packages:
    ```bash
    pip install '.[accelerate]'
    ```
 
-4. Add packages in virtual environment to PYTHONPATH:
+5. Add packages in virtual environment to PYTHONPATH:
    ```bash
    export PYTHONPATH="/projappl/<PROJECT_FOLDER>/$USER/lighteval/.venv/lib/python3.10/site-packages/"
    ```
 
-5. Multi-GPU configuration:
+6. Multi-GPU configuration:
    ```bash
    singularity_wrapper exec accelerate config
    ```
@@ -70,7 +74,7 @@ To set up this project on LUMI, follow these steps:
     Do you want to use DeepSpeed? [yes/NO]:
     Do you want to use FullyShardedDataParallel? [yes/NO]:
     Do you want to use Megatron-LM ? [yes/NO]:
-    How many GPU(s) should be used for distributed training? [1]:4
+    How many GPU(s) should be used for distributed training? [1]:2
     What GPU(s) (by id) should be used for training on this machine as a comma-seperated list? [all]:
     --------------------------------------------------------------------
     Do you wish to use FP16 or BF16 (mixed precision)?
