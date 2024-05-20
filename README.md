@@ -101,8 +101,17 @@ singularity_wrapper exec accelerate launch --multi_gpu --num_processes=2 run_eva
     -–override_batch_size=1
 ```
 
-## Evaluating Poro 34B
-Evaluating Poro required `max_length=2048` as a model argument. Otherwise the program crashed.
+### Evaluating Viking 7B
+```bash
+singularity_wrapper exec accelerate launch --multi_gpu --num_processes=2 run_evals_accelerate.py \
+    --model_args="pretrained=LumiOpen/Viking-7B" \
+    --tasks "leaderboard|truthfulqa:mc|0|0" \
+    --output_dir="./evals/" \
+    --override_batch_size=1
+```
+
+### Evaluating Poro 34B
+Evaluating Poro requires `max_length=2048` as a model argument. Otherwise the program will crash immediately. 
 ```bash
 singularity_wrapper exec accelerate launch --multi_gpu --num_processes=2 run_evals_accelerate.py \
     --model_args="pretrained=LumiOpen/Poro-34B,max_length=2048" \
