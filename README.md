@@ -120,7 +120,8 @@ singularity_wrapper exec accelerate launch --multi_gpu --num_processes=2 run_eva
     --output_dir="./evals/" \
     -–override_batch_size=10
 ```
-
+### Scripts for sbatch jobs
+You can find example scripts for evaluating Poro and Viking on LUMI [**here**](examples/batch_scripts)
 
 ## Original Project
 
