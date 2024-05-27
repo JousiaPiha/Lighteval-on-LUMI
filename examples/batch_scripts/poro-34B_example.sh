@@ -25,4 +25,4 @@ srun singularity_wrapper exec accelerate launch --num_machines=1 \
   --model_args="pretrained=LumiOpen/Poro-34B,max_length=2048,model_parallel=True,dtype=bfloat16" \
   --tasks "leaderboard|arc:challenge|25|0,leaderboard|hellaswag|10|0,original|mmlu|5|0,leaderboard|truthfulqa:mc|0|0,leaderboard|winogrande|5|0" \
   --output_dir="$PROJECT_PATH/evals/poro/" \
-  --override_batch_size=12
+  --override_batch_size=4
