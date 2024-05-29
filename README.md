@@ -90,7 +90,7 @@ To set up this project on LUMI, follow these steps:
 
 ## Evaluating examples
 
-Now the installation can be tested:
+Now the installation can be tested. The batch size must be manually adjusted. The model size, task, and GPU resources will affect how large a batch can be run.
 
 ```bash
 mkdir evals
