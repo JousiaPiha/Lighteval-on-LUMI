@@ -1,3 +1,57 @@
+# Lighteval on LUMI
+
+This repository is a fork of the Lighteval project, adjusted for evaluating large language models (LLMs) on the LUMI supercomputer.
+
+## Notes:
+- The current recommended setup is easily done with Pip.
+- [Legacy branch](https://github.com/JousiaPiha/Lighteval-on-LUMI/tree/legacy) is Lighteval version 0.3.0 and is no longer maintained.
+- Instructions for source code installation will be provided later.
+
+## Get started with Lighteval on LUMI
+
+```bash
+# Load modules so that a correct virtual environment can be created
+module use /appl/local/csc/modulefiles/
+module purge
+module load LUMI
+module load pytorch
+
+# Set your project ID
+PROJECTID="your_project_id_number"
+
+# Create a folder and a virtual environment in it
+mkdir /projappl/$PROJECTID/$USER/lighteval
+cd /projappl/$PROJECTID/$USER/lighteval
+python -m venv .venv --system-site-packages
+source .venv/bin/activate
+unset PYTHONPATH
+export HF_HOME=/scratch/$PROJECTID/$USER/hf_cache
+export PYTHONPATH=/projappl/$PROJECTID/$USER/lighteval/.venv/lib/python$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")/site-packages
+pip install lighteval[accelerate,vllm,extended_tasks]
+```
+Lighteval is now installed.
+
+### Test it with an interactive compute node
+```bash
+srun \
+  --account=$PROJECTID \
+  --partition=dev-g \
+  --nodes=1 \
+  --gres=gpu:mi250:2 \
+  --time=3:00:00 \
+  --mem=0 \
+  --pty \
+  --export=PYTHONPATH,HF_CACHE \
+  bash -c \
+  "module use /appl/local/csc/modulefiles/ && \
+  module purge && \
+  module load LUMI && \
+  module load pytorch && \
+  cd /projappl/$PROJECTID/$USER/lighteval && \
+  source ./.venv/bin/activate && \
+  bash"
+```
+
 <p align="center">
   <br/>
     <img alt="lighteval library logo" src="./assets/lighteval-doc.svg" width="376" height="59" style="max-width: 100%;">
