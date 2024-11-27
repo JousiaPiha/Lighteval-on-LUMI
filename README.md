@@ -81,8 +81,8 @@ Then you should be able to run the evaluations with:
 ```bash
 lighteval accelerate \
     --model_args="vllm,pretrained=HuggingFaceFW/ablation-model-fineweb-edu,dtype=bfloat16" \
-    --custom_tasks "./tasks/lighteval_tasks.py" --max_samples 1000 \
-    --tasks "./tasks/fineweb.txt" \
+    --custom_tasks "./evals/tasks/lighteval_tasks.py" --max_samples 1000 \
+    --tasks ".evals/tasks/fineweb.txt" \
     --output_dir "./evals/"
 ```
 
