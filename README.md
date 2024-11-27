@@ -17,7 +17,7 @@ module load LUMI
 module load pytorch
 
 # Set your project ID
-PROJECTID="your_project_id_number"
+export PROJECTID="your_project_id"
 
 # Create a folder and a virtual environment in it
 mkdir /projappl/$PROJECTID/$USER/lighteval
@@ -25,8 +25,8 @@ cd /projappl/$PROJECTID/$USER/lighteval
 python -m venv .venv --system-site-packages
 source .venv/bin/activate
 unset PYTHONPATH
-export HF_HOME=/scratch/$PROJECTID/$USER/hf_cache
 export PYTHONPATH=/projappl/$PROJECTID/$USER/lighteval/.venv/lib/python$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")/site-packages
+export HF_HOME=/scratch/$PROJECTID/$USER/hf_cache
 pip install lighteval[accelerate,vllm,extended_tasks]
 ```
 Lighteval is now installed.
@@ -41,7 +41,7 @@ srun \
   --time=3:00:00 \
   --mem=0 \
   --pty \
-  --export=PYTHONPATH,HF_CACHE \
+  --export=PYTHONPATH,HF_HOME,PROJECTID \
   bash -c \
   "module use /appl/local/csc/modulefiles/ && \
   module purge && \
