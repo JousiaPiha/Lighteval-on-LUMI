@@ -6,6 +6,7 @@ This repository is a fork of the Lighteval project, adjusted for evaluating larg
 - The current recommended setup is easily done with Pip.
 - [Legacy branch](https://github.com/JousiaPiha/Lighteval-on-LUMI/tree/legacy) is Lighteval version 0.3.0 and is no longer maintained.
 - Instructions for source code installation will be provided later.
+- Instructions for running evals on LUMI with transformers backend will be provided later.
 
 ## Get started with Lighteval on LUMI
 
@@ -69,7 +70,7 @@ accelerate launch --multi_gpu --num_processes=2 -m \
 ### Run Fineweb evals
 [Fineweb](https://huggingface.co/blog/open-llm-leaderboard-mmlu#1001-flavors-of-mmlu) evals use a custom task. The original custom task and instructions are available [here](https://huggingface.co/datasets/HuggingFaceFW/fineweb/blob/main/lighteval_tasks.py#L12).
 
-For the new version of Lighteval, the custom task had to be modiefied. Follow these instructions to get Fineweb evaluations working with fast VLLM backend:
+For the new version of Lighteval, the [custom task had to be modiefied](https://github.com/JousiaPiha/Lighteval-on-LUMI/blob/main/evals/tasks/lighteval_tasks.py). Follow these instructions to get Fineweb evaluations working with fast [VLLM backend](https://github.com/huggingface/lighteval/wiki/Use-VLLM-as-backend):
 ```bash
 mkdir evals/tasks -p
 # Download the custom task
@@ -85,7 +86,7 @@ lighteval accelerate \
     --tasks "./evals/tasks/fineweb.txt" \
     --output_dir "./evals/"
 ```
-
+Currently, parallelism is not working well with VLLM and ROCM. We are investigating it.
 
 <p align="center">
   <br/>
