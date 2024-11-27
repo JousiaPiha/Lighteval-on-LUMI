@@ -20,7 +20,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
-
-setup()
+setup(
+    name="lighteval",
+    version="0.6.0.dev0",
+    packages=find_packages(where="src"),  # Ensures packages in "src" are found
+    package_dir={"": "src"},  # Maps the root of the package to "src"
+    entry_points={
+        "console_scripts": [
+            "lighteval=lighteval.__main__:cli_evaluate",  # Adds the CLI script
+        ],
+    },
+    extras_require={
+        "accelerate": ["accelerate"],
+        "vllm": ["vllm", "ray", "more_itertools"],
+    },
+    install_requires=[
+        # List all base dependencies here
+        "transformers>=4.38.0",
+        "huggingface_hub>=0.23.0",
+        "torch>=2.0,<2.5",
+        "GitPython>=3.1.41",
+        "datasets>=2.14.0",
+        "termcolor==2.3.0",
+        "pytablewriter",
+        "colorama",
+        "aenum==3.1.15",
+        "nltk==3.9.1",
+        "scikit-learn",
+        "spacy==3.7.2",
+        "sacrebleu",
+        "rouge_score==0.1.2",
+        "sentencepiece>=0.1.99",
+        "protobuf==3.20.*",
+        "pycountry",
+        "fsspec>=2023.12.2",
+    ],
+)
