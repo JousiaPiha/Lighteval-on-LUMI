@@ -38,18 +38,18 @@ srun \
   --partition=dev-g \
   --nodes=1 \
   --gres=gpu:mi250:2 \
-  --time=3:00:00 \
+  --time=2:00:00 \
   --mem=0 \
   --pty \
-  --export=PYTHONPATH,HF_HOME,PROJECTID \
-  bash -c \
+  bash -l -c \
   "module use /appl/local/csc/modulefiles/ && \
   module purge && \
   module load LUMI && \
   module load pytorch && \
   cd /projappl/$PROJECTID/$USER/lighteval && \
+  export PS1='\u@\h:\w> ' && \
   source ./.venv/bin/activate && \
-  bash"
+  exec bash"
 ```
 
 <p align="center">
