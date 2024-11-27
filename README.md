@@ -31,6 +31,11 @@ pip install lighteval[accelerate,vllm,extended_tasks]
 ```
 Lighteval is now installed.
 
+You can do multi-GPU config with:
+```bash
+accelerate config
+```
+
 ### Test it with an interactive compute node
 ```bash
 srun \
@@ -46,11 +51,41 @@ srun \
   module purge && \
   module load LUMI && \
   module load pytorch && \
+  module load wget && \
   cd /projappl/$PROJECTID/$USER/lighteval && \
   export PS1='\u@\h:\w> ' && \
   source ./.venv/bin/activate && \
   exec bash"
 ```
+Check the setup with
+```bash
+accelerate launch --multi_gpu --num_processes=2 -m \
+    lighteval accelerate \
+    --model_args "pretrained=gpt2" \
+    --tasks "leaderboard|truthfulqa:mc|0|0" \
+    --override_batch_size 1 \
+    --output_dir="./evals/"
+```
+### Run Fineweb evals
+[Fineweb](https://huggingface.co/blog/open-llm-leaderboard-mmlu#1001-flavors-of-mmlu) evals use a custom task. The original custom task and instructions are available [here](https://huggingface.co/datasets/HuggingFaceFW/fineweb/blob/main/lighteval_tasks.py#L12).
+
+For the new version of Lighteval, the custom task had to be modiefied. Follow these instructions to get Fineweb evaluations working with fast VLLM backend:
+```bash
+mkdir evals/tasks -p
+# Download the custom task
+wget -P evals/tasks/ https://raw.githubusercontent.com/JousiaPiha/Lighteval-on-LUMI/refs/heads/main/evals/tasks/lighteval_tasks.py
+# Download the task list
+wget -P evals/tasks/ https://raw.githubusercontent.com/JousiaPiha/Lighteval-on-LUMI/refs/heads/main/evals/tasks/fineweb.txt
+```
+Then you should be able to run the evaluations with:
+```bash
+lighteval accelerate \
+    --model_args="vllm,pretrained=HuggingFaceFW/ablation-model-fineweb-edu,dtype=bfloat16" \
+    --custom_tasks "./tasks/lighteval_tasks.py" --max_samples 1000 \
+    --tasks "./tasks/fineweb.txt" \
+    --output_dir "./evals/"
+```
+
 
 <p align="center">
   <br/>
