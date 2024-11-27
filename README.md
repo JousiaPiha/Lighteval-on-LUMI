@@ -82,7 +82,7 @@ Then you should be able to run the evaluations with:
 lighteval accelerate \
     --model_args="vllm,pretrained=HuggingFaceFW/ablation-model-fineweb-edu,dtype=bfloat16" \
     --custom_tasks "./evals/tasks/lighteval_tasks.py" --max_samples 1000 \
-    --tasks ".evals/tasks/fineweb.txt" \
+    --tasks "./evals/tasks/fineweb.txt" \
     --output_dir "./evals/"
 ```
 
