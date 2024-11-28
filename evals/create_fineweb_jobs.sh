@@ -29,8 +29,8 @@ usage() {
     echo "Required arguments:"
     echo "  --model_folder   Path to the model folder"
     echo "  --account        Account name"
+    echo "  --job_name_prefix Prefix for job names"
     echo "Optional arguments:"
-    echo "  --job_name_prefix Prefix for job names (default: LEFW-)"
     echo "  --partition       Partition to use (default: standard-g)"
     echo "  --time            Time for the job (default: 0:20:00)"
     echo "  --gpu             Number of GPUs (default: 1)"
@@ -39,8 +39,10 @@ usage() {
     echo "  --jobs_output     Jobs output folder (default: ./jobs/)"
     echo "  --model_dtype     Model data type (default: bfloat16)"
     echo "  --virtual_env     Path to virtual environment (default: ./.venv)"
+    echo "  --gpt2_tokenizer  Use GPT2 tokenizer (default: False)"
     exit 0
 }
+gpt2_tokenizer="False"  # Default value
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -101,6 +103,10 @@ while [[ $# -gt 0 ]]; do
         shift
         shift
         ;;
+        --gpt2_tokenizer)
+        gpt2_tokenizer="True"
+        shift
+        ;;
         --help|-h)
         usage
         ;;
@@ -112,8 +118,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Ensure required arguments are provided
-if [ -z "$model_folder" ] || [ -z "$account" ]; then
-    echo "Error: --model_folder and --account are required."
+if [ -z "$model_folder" ] || [ -z "$account" ] || [ -z "$job_name_prefix" ]; then
+    echo "Error: --model_folder, --account, and --job_name_prefix are required."
     usage
 fi
 
@@ -145,6 +151,7 @@ echo "Log output: $log_output"
 echo "Jobs output: $jobs_output"
 echo "Model dtype: $model_dtype"
 echo "Virtual env: $virtual_env"
+echo "GPT2 Tokenizer: $gpt2_tokenizer"
 
 
 # Check if the virtual environment exists
@@ -194,6 +201,14 @@ if [ ! -f "./evals/tasks/fineweb.txt" ]; then
     wget -O "./evals/tasks/fineweb.txt" "https://raw.githubusercontent.com/JousiaPiha/Lighteval-on-LUMI/main/evals/tasks/fineweb.txt"
 fi
 
+# Check if GPT2 tokenizer should be used
+if [ "$gpt2_tokenizer" == "True" ]; then
+    echo "GPT2 tokenizer is set to True. Downloading GPT2 tokenizer."
+    if [ ! -f "./evals/tasks/gpt2_tokenizer.json" ]; then
+        wget -O "./evals/tasks/gpt2_tokenizer.json" "https://huggingface.co/openai-community/gpt2/resolve/main/tokenizer.json"
+    fi
+fi
+
 # Set custom tasks script
 custom_tasks_script="./evals/tasks/lighteval_tasks.py"
 # Set tasks list file
@@ -216,7 +231,12 @@ for model_checkpoint_folder in $model_folder/*; do
         # Check if the model_checkpoint_folder contains a tokenizer.json file
         if [ ! -f "$model_checkpoint_folder/tokenizer.json" ]; then
             echo "Tokenizer file does not exist in $model_checkpoint_folder."
-            continue
+            if [ "$gpt2_tokenizer" == "True" ]; then
+                echo "Copying GPT2 tokenizer to $model_checkpoint_folder."
+                cp "./evals/tasks/gpt2_tokenizer.json" "$model_checkpoint_folder/tokenizer.json"
+            else
+                continue
+            fi
         fi
         # Set the job_name
         job_name="${job_name_prefix}$(basename $model_checkpoint_folder)"
