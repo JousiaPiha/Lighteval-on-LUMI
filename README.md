@@ -88,6 +88,19 @@ lighteval accelerate \
 ```
 Currently, parallelism is not working well with VLLM and ROCM. We are investigating it.
 
+## Run with Transformers backend
+
+**Example:**
+The following assumes there's 4 GPUs available. Both pipeline and data parallelism are used. If the model fits in one GPU, --num_processes could be 4 and model_parallel=False.
+Note that enough RAM must be requested.
+```bash
+accelerate launch --multi_gpu --num_processes=2 -m \
+  lighteval accelerate \
+    --model_args="pretrained=pretrained=HuggingFaceFW/ablation-model-fineweb-edu,dtype=bfloat16,trust_remote_code=True,model_parallel=True" \
+    --tasks "leaderboard|truthfulqa:mc|0|0" \
+    --output_dir "./evals/" \
+    --override_batch_size 1
+```
 <p align="center">
   <br/>
     <img alt="lighteval library logo" src="./assets/lighteval-doc.svg" width="376" height="59" style="max-width: 100%;">
